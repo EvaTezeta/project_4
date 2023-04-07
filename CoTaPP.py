@@ -137,7 +137,7 @@ class Grid:
     
   def show_best_path(self):
     best_path = list(self.choose_best_root())[1]
-    x_coordinate = 150
+    x_coordinate = 120
     y_coordinate = 300
     x_coordinates = [x_coordinate]
     y_coordinates = [y_coordinate]

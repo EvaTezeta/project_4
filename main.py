@@ -57,19 +57,19 @@ class Grid:
     self.container1.pack()
 
     #Button 1
-    self.button1 = tk.Button(self.container1, text="Find best path", activebackground = "grey")
-    self.button1.pack(side="left")
-    self.button1.bind("<Button-1>", self.button1Click)
+    self.findPathButton = tk.Button(self.container1, text="Find best path", activebackground = "grey")
+    self.findPathButton.pack(side="left")
+    self.findPathButton.bind("<Button-1>", self.PathButton)
 
     #Button 2
-    self.button2 = tk.Button(self.container1, text="Create new random field", activebackground = "grey")
-    self.button2.pack(side="left")
-    self.button2.bind("<Button-1>", self.button2Click)
+    self.newFieldButton = tk.Button(self.container1, text="Create new random field", activebackground = "grey")
+    self.newFieldButton.pack(side="left")
+    self.newFieldButton.bind("<Button-1>", self.FieldButton)
 
     #Button 3
-    self.button3 = tk.Button(self.container1, text="Exit program", activebackground = "red")
-    self.button3.pack(side="left")
-    self.button3.bind("<Button-1>", self.button3Click)
+    self.exitButton = tk.Button(self.container1, text="Exit program", activebackground = "red")
+    self.exitButton.pack(side="left")
+    self.exitButton.bind("<Button-1>", self.ExitProgramButton)
 
   def set_start(self, row, column):
     rect, _ = self.rects[row][column]
@@ -86,11 +86,11 @@ class Grid:
     pass
 
   # Button 1 draws the best path
-  def button1Click(self, event):
+  def PathButton(self, event):
     pass
 
   # Button 2 makes a new random field
-  def button2Click(self, event):
+  def FieldButton(self, event):
     self.grid = [[random.randint(0, 9) for j in range(self.col)]
                  for i in range(self.row)]
     for i in range(self.row):
@@ -100,7 +100,7 @@ class Grid:
     self.buttons[0][4].config(text="G")
 
   # Button 3 exits the program
-  def button3Click(self, event):
+  def ExitProgramButton(self, event):
     self.parent.destroy()
 
 
