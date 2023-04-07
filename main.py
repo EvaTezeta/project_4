@@ -3,7 +3,7 @@ import tkinter as tk
 import random
 import copy
 
-#Make class for the Pathfinder
+#Make class       
 class Grid:
 
   def __init__(self, parent):
@@ -15,67 +15,62 @@ class Grid:
     self.cell_size = 60
     self.canvas_width = self.col * self.cell_size
     self.canvas_height = self.row * self.cell_size
-    self.canvas = tk.Canvas(parent,
-                            width = self.canvas_width,
-                            height = self.canvas_height)
+    self.canvas = tk.Canvas(parent, width=self.canvas_width, height=self.canvas_height)
     self.canvas.pack()
 
     # Create a 5x5 grid with random numbers
-    self.grid = [[random.randint(0, 9) for j in range(self.col)]
-                 for i in range(self.row)]
+    self.grid = [[random.randint(0, 9) for j in range(self.col)] for i in range(self.row)]
     self.grid[0][4] = 0
     self.grid[4][0] = 0
     self.grid[::-1]
     self.rects = []
     for i in range(self.row):
-      row = []
-      for j in range(self.col):
-        x0 = j * self.cell_size
-        y0 = i * self.cell_size
-        x1 = x0 + self.cell_size
-        y1 = y0 + self.cell_size
-        rect = self.canvas.create_rectangle(x0, y0, x1, y1, fill="white")
-        text = self.canvas.create_text(x0 + self.cell_size // 2,
-                                       y0 + self.cell_size // 2,
-                                       text=str(self.grid[i][j]))
-        row.append((rect, text))
-      self.rects.append(row)
+        row = []
+        for j in range(self.col):
+            x0 = j * self.cell_size
+            y0 = i * self.cell_size
+            x1 = x0 + self.cell_size
+            y1 = y0 + self.cell_size
+            rect = self.canvas.create_rectangle(x0, y0, x1, y1, fill="white")
+            text = self.canvas.create_text(x0+self.cell_size//2, y0+self.cell_size//2, text=str(self.grid[i][j]))
+            row.append((rect, text))
+        self.rects.append(row)
     self.set_start(0, 4)
     self.set_goal(4, 0)
     
     # A container for the buttons
     self.container1 = tk.Frame(parent)
     self.container1.pack()
-
-    # Print the maximum score
+    
+    # Label: Print the maximum score
     self.score_label = tk.Label(self.container1)
     self.score_label["text"] = self.get_maximum_possible_score()
-    self.score_label.configure(text = self.score_label["text"])
-    self.score_label.pack(side = "top")
-    
+    self.score_label.configure(text=self.score_label["text"])
+    self.score_label.pack(side="top")
+
     #Button 1
-    self.findPathButton = tk.Button(self.container1, text = "Find best path", activebackground = "grey")
-    self.findPathButton.pack(side = "left")
-    self.findPathButton.bind("<Button-1>", self.PathButton)
+    self.button1 = tk.Button(self.container1, text="Find best path")
+    self.button1.pack(side="left")
+    self.button1.bind("<Button-1>", self.button1Click)
 
     #Button 2
-    self.newFieldButton = tk.Button(self.container1, text ="Create new random field", activebackground = "grey")
-    self.newFieldButton.pack(side = "left")
-    self.newFieldButton.bind("<Button-1>", self.FieldButton)
+    self.button2 = tk.Button(self.container1, text="Create new random field")
+    self.button2.pack(side="left")
+    self.button2.bind("<Button-1>", self.button2Click)
 
     #Button 3
-    self.exitButton = tk.Button(self.container1, text = "Exit program", activebackground = "red")
-    self.exitButton.pack(side = "left")
-    self.exitButton.bind("<Button-1>", self.ExitProgramButton)
+    self.button3 = tk.Button(self.container1, text="Exit program")
+    self.button3.pack(side="left")
+    self.button3.bind("<Button-1>", self.button3Click)
 
   def set_start(self, row, column):
     rect, _ = self.rects[row][column]
-    self.canvas.itemconfig(rect, fill = "green")
+    self.canvas.itemconfig(rect, fill="green")
 
   def set_goal(self, row, column):
     rect, _ = self.rects[row][column]
-    self.canvas.itemconfig(rect, fill = "red")
-
+    self.canvas.itemconfig(rect, fill="red")
+    
   @staticmethod
   def create_path_options():
     root_1 = []
@@ -130,6 +125,8 @@ class Grid:
           current_row = 4
           current_column = 0
           result = self.grid[4][0]
+
+      print(result_max, best_root)
       return result_max, best_root
 
   def get_maximum_possible_score(self):
@@ -139,8 +136,9 @@ class Grid:
     
   def show_best_path(self):
     best_path = list(self.choose_best_root())[1]
-    x_coordinate = 120
-    y_coordinate = 300
+    x_coordinate = 30
+    y_coordinate = 270
+
     x_coordinates = [x_coordinate]
     y_coordinates = [y_coordinate]
     for direction in best_path:
@@ -152,18 +150,20 @@ class Grid:
             x_coordinate += 60
             x_coordinates.append(x_coordinate)
             y_coordinates.append(y_coordinate)
+
+
     for i in range(len(x_coordinates)-1):
        self.canvas.create_line(x_coordinates[i], y_coordinates[i],
                                x_coordinates[i+1], y_coordinates[i+1])
-    self.canvas.pack()
-    #self.canvas.bind("<Button-1>", self.PathButton())
 
+    self.canvas.pack()
+    
   # Button 1 draws the best path
-  def PathButton(self, event):
+  def button1Click(self, event):
     self.show_best_path()
 
-  # Button 2 makes a new random field - doesn't work yet
-  def FieldButton(self, event):
+  # Button 2 makes a new random field
+  def button2Click(self, event):
     self.grid = [[random.randint(0, 9) for j in range(self.col)] for i in range(self.row)]
     self.grid[0][4] = 0
     self.grid[4][0] = 0
@@ -176,22 +176,16 @@ class Grid:
     # Get new label text
     self.score_label["text"] = self.get_maximum_possible_score()
 
-     # Printi
-
 
   # Button 3 exits the program
-  def ExitProgramButton(self, event):
-    self.parent.destroy()
+  def button3Click(self, event):
+    self.parent.destroy()  
 
 
-# Geometry and title
+# Form window and title
 root = tk.Tk()
-root.geometry("500x500")
 root.title("Pathfinder")
-
-# Create the grid within the frame (delete later when canvas works)
-Grid = Grid(root)
-#Grid.set_start(4, 0)
-#Grid.set_goal(0, 4)
+root.geometry("500x500")
+find_best_path = Grid(root)
 
 root.mainloop()
