@@ -26,7 +26,7 @@ class Grid:
     self.grid[::-1]
     self.rects = []
     for i in range(self.row):
-        row = []
+      row = []
         for j in range(self.col):
             x0 = j * self.cell_size
             y0 = i * self.cell_size
@@ -137,8 +137,9 @@ class Grid:
     
   def show_best_path(self):
     best_path = list(self.choose_best_root())[1]
-    x_coordinate = 120
-    y_coordinate = 300
+    x_coordinate = 30
+    y_coordinate = 270
+
     x_coordinates = [x_coordinate]
     y_coordinates = [y_coordinate]
     for direction in best_path:
@@ -150,18 +151,14 @@ class Grid:
             x_coordinate += 60
             x_coordinates.append(x_coordinate)
             y_coordinates.append(y_coordinate)
-    self.canvas = tk.Canvas(self.root)
-    self.canvas.create_line(x_coordinates[0], y_coordinates[0],
-                            x_coordinates[1], y_coordinates[1],
-                            x_coordinates[2], y_coordinates[2],
-                            x_coordinates[3], y_coordinates[3],
-                            x_coordinates[4], y_coordinates[4],
-                            x_coordinates[5], y_coordinates[5],
-                            x_coordinates[6], y_coordinates[6],
-                            x_coordinates[7], y_coordinates[7])
+
+
+    for i in range(len(x_coordinates)-1):
+       self.canvas.create_line(x_coordinates[i], y_coordinates[i],
+                               x_coordinates[i+1], y_coordinates[i+1])
+
     self.canvas.pack()
-    self.canvas.bind("<Button-1>", self.button1Click())
-  
+    
   # Button 1 draws the best path
   def button1Click(self, event):
     self.show_best_path()
