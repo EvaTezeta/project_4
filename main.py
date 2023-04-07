@@ -24,9 +24,9 @@ class Grid:
     # Create a 5x5 grid with random numbers
     self.grid = [[random.randint(0, 9) for j in range(self.col)]
                  for i in range(self.row)]
-    self.grid[0][4] = 0
-    self.grid[4][0] = 0
-    self.grid[::-1]
+    
+    self.grid[0][4] = "S"
+    self.grid[4][0] = "G"
     self.rects = []
     for i in range(self.row):
       row = []
@@ -43,6 +43,9 @@ class Grid:
       self.rects.append(row)
     self.set_start(0, 4)
     self.set_goal(4, 0)
+    self.grid[0][4] = 0
+    self.grid[4][0] = 0
+    self.grid[::-1]
 
     # A container for the buttons
     self.container1 = tk.Frame(parent)
@@ -138,7 +141,6 @@ class Grid:
       current_column = 0
       result = self.grid[4][0]
 
-    print(result_max, best_root)
     return result_max, best_root
 
   def get_maximum_possible_score(self):
@@ -182,14 +184,14 @@ class Grid:
     self.canvas.delete("best_path_line")
     self.grid = [[random.randint(0, 9) for j in range(self.col)]
                  for i in range(self.row)]
-    self.grid[0][4] = 0
-    self.grid[4][0] = 0
-    self.grid[::-1]
-
+    self.grid[0][4] = "S"
+    self.grid[4][0] = "G"
     for i in range(self.row):
       for j in range(self.col):
         self.canvas.itemconfig(self.rects[i][j][1], text=str(self.grid[i][j]))
-
+    self.grid[0][4] = 0
+    self.grid[4][0] = 0
+    self.grid[::-1]
     # Get new label text
     self.score_label["text"] = self.get_maximum_possible_score()
 
