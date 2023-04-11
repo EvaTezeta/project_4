@@ -25,8 +25,8 @@ class Grid:
     self.grid = [[random.randint(0, 9) for j in range(self.col)]
                  for i in range(self.row)]
     
-    self.grid[0][4] = "S"
-    self.grid[4][0] = "G"
+    self.grid[0][4] = "G"
+    self.grid[4][0] = "S"
     self.rects = []
     for i in range(self.row):
       row = []
@@ -58,33 +58,33 @@ class Grid:
     self.score_label.pack(side="top")
 
     #Button 1
-    self.button1 = tk.Button(self.container1, text="Find best path")
+    self.button1 = tk.Button(self.container1, text="Find best path", activebackground = "grey")
     self.button1.pack(side="left")
     self.button1.bind("<Button-1>", self.button1Click)
 
     #Button 2
-    self.button2 = tk.Button(self.container1, text="Create new random field")
+    self.button2 = tk.Button(self.container1, text="Create new random field", activebackground = "grey")
     self.button2.pack(side="left")
     self.button2.bind("<Button-1>", self.button2Click)
 
     #Button 3
-    self.button3 = tk.Button(self.container1, text="Exit program")
+    self.button3 = tk.Button(self.container1, text="Exit program", activebackground = 'red')
     self.button3.pack(side="left")
     self.button3.bind("<Button-1>", self.button3Click)
 
   def set_start(self, row, column):
     rect, _ = self.rects[row][column]
-    self.canvas.itemconfig(rect, fill="green")
-    self.canvas.create_text(column * self.cell_size + self.cell_size // 2,
-                            row * self.cell_size + self.cell_size // 2,
-                            text="S")
-
-  def set_goal(self, row, column):
-    rect, _ = self.rects[row][column]
     self.canvas.itemconfig(rect, fill="red")
     self.canvas.create_text(column * self.cell_size + self.cell_size // 2,
                             row * self.cell_size + self.cell_size // 2,
                             text="G")
+
+  def set_goal(self, row, column):
+    rect, _ = self.rects[row][column]
+    self.canvas.itemconfig(rect, fill="green")
+    self.canvas.create_text(column * self.cell_size + self.cell_size // 2,
+                            row * self.cell_size + self.cell_size // 2,
+                            text="S")
 
   @staticmethod
   def create_path_options():
