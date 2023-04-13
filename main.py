@@ -10,8 +10,10 @@ import tkinter as tk
 import random
 import copy
 
+
 #Make class
 class Grid:
+
     def __init__(self, parent):
         self.parent = parent
         self.root = tk.Frame(parent)
@@ -21,11 +23,14 @@ class Grid:
         self.cell_size = 60
         self.canvas_width = self.col * self.cell_size
         self.canvas_height = self.row * self.cell_size
-        self.canvas = tk.Canvas(parent, width=self.canvas_width, height=self.canvas_height)
+        self.canvas = tk.Canvas(parent,
+                                width=self.canvas_width,
+                                height=self.canvas_height)
         self.canvas.pack()
 
         # Create a 5x5 grid with random numbers
-        self.grid = [[random.randint(0, 9) for j in range(self.col)] for i in range(self.row)]
+        self.grid = [[random.randint(0, 9) for j in range(self.col)]
+                     for i in range(self.row)]
 
         self.grid[0][4] = "G"
         self.grid[4][0] = "S"
@@ -37,8 +42,14 @@ class Grid:
                 y0 = i * self.cell_size
                 x1 = x0 + self.cell_size
                 y1 = y0 + self.cell_size
-                rect = self.canvas.create_rectangle(x0, y0, x1, y1, fill="white")
-                text = self.canvas.create_text(x0 + self.cell_size // 2, y0 + self.cell_size // 2, text=str(self.grid[i][j]))
+                rect = self.canvas.create_rectangle(x0,
+                                                    y0,
+                                                    x1,
+                                                    y1,
+                                                    fill="white")
+                text = self.canvas.create_text(x0 + self.cell_size // 2,
+                                               y0 + self.cell_size // 2,
+                                               text=str(self.grid[i][j]))
                 row.append((rect, text))
             self.rects.append(row)
         self.set_start(0, 4)
@@ -58,17 +69,23 @@ class Grid:
         self.score_label.pack(side="top")
 
         #Button 1
-        self.button1 = tk.Button(self.container1, text="Find best path", activebackground="grey")
+        self.button1 = tk.Button(self.container1,
+                                 text="Find best path",
+                                 activebackground="grey")
         self.button1.pack(side="left")
         self.button1.bind("<Button-1>", self.button1Click)
 
         #Button 2
-        self.button2 = tk.Button(self.container1, text="Create new random field", activebackground="grey")
+        self.button2 = tk.Button(self.container1,
+                                 text="Create new random field",
+                                 activebackground="grey")
         self.button2.pack(side="left")
         self.button2.bind("<Button-1>", self.button2Click)
 
         #Button 3
-        self.button3 = tk.Button(self.container1, text="Exit program", activebackground='red')
+        self.button3 = tk.Button(self.container1,
+                                 text="Exit program",
+                                 activebackground='red')
         self.button3.pack(side="left")
         self.button3.bind("<Button-1>", self.button3Click)
 
@@ -76,7 +93,7 @@ class Grid:
         self.canvas.bind("<Button-1>", self.cell_click)
 
     def cell_click(self, event):
-        
+
         #Change the color of the clicked cell to blue.
         x, y = event.x, event.y
         col = x // self.cell_size
@@ -179,8 +196,8 @@ class Grid:
     # Button 1 draws the best path
     def button1Click(self, event):
         self.show_best_path()
-        self.score_label["text"] = "Maximum possible score: " + str(list(self.choose_best_root())[0])
-        
+        self.score_label["text"] = "Maximum possible score: " + str(
+            list(self.choose_best_root())[0])
 
     # Button 2 makes a new random field
     def button2Click(self, event):
@@ -192,7 +209,7 @@ class Grid:
         for i in range(self.row):
             for j in range(self.col):
                 self.canvas.itemconfig(self.rects[i][j][1],
-                                       text = str(self.grid[i][j]))
+                                       text=str(self.grid[i][j]))
                 rect, _ = self.rects[i][j]
                 self.canvas.itemconfig(rect, fill="white")
         self.set_start(0, 4)
@@ -215,4 +232,3 @@ root.geometry("500x500")
 find_best_path = Grid(root)
 
 root.mainloop()
-
