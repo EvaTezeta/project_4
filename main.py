@@ -51,9 +51,9 @@ class Grid:
         self.container1 = tk.Frame(parent)
         self.container1.pack()
 
-        # Label: Print the maximum score
+        # Label: Print the maximum score label
         self.score_label = tk.Label(self.container1, background="white")
-        self.score_label["text"] = self.get_maximum_possible_score()
+        self.score_label["text"] = "Maximum possible score: "
         self.score_label.configure(text=self.score_label["text"])
         self.score_label.pack(side="top")
 
@@ -149,11 +149,6 @@ class Grid:
 
         return result_max, best_root
 
-    def get_maximum_possible_score(self):
-        maximum_score = list(self.choose_best_root())[0]
-        text = "Possible maximum score: " + str(maximum_score)
-        return text
-
     def show_best_path(self):
         best_path = list(self.choose_best_root())[1]
         x_coordinate = 30
@@ -184,6 +179,8 @@ class Grid:
     # Button 1 draws the best path
     def button1Click(self, event):
         self.show_best_path()
+        self.score_label["text"] = "Maximum possible score: " + str(list(self.choose_best_root())[0])
+        
 
     # Button 2 makes a new random field
     def button2Click(self, event):
@@ -195,12 +192,16 @@ class Grid:
         for i in range(self.row):
             for j in range(self.col):
                 self.canvas.itemconfig(self.rects[i][j][1],
-                                       text=str(self.grid[i][j]))
+                                       text = str(self.grid[i][j]))
+                rect, _ = self.rects[i][j]
+                self.canvas.itemconfig(rect, fill="white")
+        self.set_start(0, 4)
+        self.set_goal(4, 0)
         self.grid[0][4] = 0
         self.grid[4][0] = 0
         self.grid[::-1]
-        # Get new label text
-        self.score_label["text"] = self.get_maximum_possible_score()
+        # Reset label text without score
+        self.score_label["text"] = "Maximum possible score: "
 
     # Button 3 exits the program
     def button3Click(self, event):
