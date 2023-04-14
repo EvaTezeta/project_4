@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Apr 13 11:42:19 2023
-
-@author: myrth
-"""
-
 #Import libraries
 import tkinter as tk
+from tkinter import messagebox
 import random
 import copy
 
@@ -19,6 +13,8 @@ class Grid:
         self.root = tk.Frame(parent)
         self.row = 5
         self.col = 5
+        self.numbers_in_the_grid = []
+        self.click_counter = 0
         self.root.pack()
         self.cell_size = 60
         self.canvas_width = self.col * self.cell_size
@@ -58,15 +54,25 @@ class Grid:
         self.grid[4][0] = 0
         self.grid[::-1]
 
+        # A container for the labels
+        self.container = tk.Frame(parent)
+        self.container.pack()
+      
         # A container for the buttons
         self.container1 = tk.Frame(parent)
         self.container1.pack()
 
         # Label: Print the maximum score label
-        self.score_label = tk.Label(self.container1, background="white")
+        self.score_label = tk.Label(self.container, background="white")
         self.score_label["text"] = "Maximum possible score: "
         self.score_label.configure(text=self.score_label["text"])
         self.score_label.pack(side="top")
+
+        # Label: Print the maximum score obtained label
+        self.score_obtained_label = tk.Label(self.container, background="white")
+        self.score_obtained_label["text"] = "Maximum score obtained by you: "
+        self.score_obtained_label.configure(text=self.score_obtained_label["text"])
+        self.score_obtained_label.pack(side="bottom")
 
         #Button 1
         self.button1 = tk.Button(self.container1,
@@ -96,11 +102,30 @@ class Grid:
 
         #Change the color of the clicked cell to blue.
         x, y = event.x, event.y
-        col = x // self.cell_size
-        row = y // self.cell_size
-        rect, _ = self.rects[row][col]
-        self.canvas.itemconfig(rect, fill="blue")
+        self.chosen_col = x // self.cell_size
+        self.chosen_row = y // self.cell_size
+        rect, _ = self.rects[self.chosen_row][self.chosen_col]
+        self.canvas.itemconfig(rect, fill="yellow")
+#        self.user_score_maximum()
+        self.congratulate_user()
 
+    def user_score_maximum(self):
+        sum_of_the_grid = 0
+        try:
+          self.numbers_in_the_grid.append(self.grid[self.chosen_row][self.chosen_col])
+        except:
+          pass
+        for number in self.numbers_in_the_grid:
+          sum_of_the_grid += number
+        self.score_obtained_label["text"] = "Maximum score obtained by you: " + str(sum_of_the_grid)
+        return sum_of_the_grid
+
+    def congratulate_user(self):
+        self.click_counter += 1
+        if list(self.choose_best_root())[0] == self.user_score_maximum():
+            if self.click_counter == 9:
+                messagebox.showinfo("Maximum score check", "Congratulations! You got the maximum score!")
+  
     def set_start(self, row, column):
         rect, _ = self.rects[row][column]
         self.canvas.itemconfig(rect, fill="red")
@@ -163,7 +188,6 @@ class Grid:
             current_row = 4
             current_column = 0
             result = self.grid[4][0]
-
         return result_max, best_root
 
     def show_best_path(self):
@@ -217,8 +241,12 @@ class Grid:
         self.grid[0][4] = 0
         self.grid[4][0] = 0
         self.grid[::-1]
+        self.numbers_in_the_grid = []
+        self.click_counter = 0
+        
         # Reset label text without score
         self.score_label["text"] = "Maximum possible score: "
+        self.score_obtained_label["text"] = "Maximum score obtained by you: "
 
     # Button 3 exits the program
     def button3Click(self, event):
